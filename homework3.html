@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration Form - We'R'Docs Medical</title>
+    <link href="style.css" rel="stylesheet">
+    <!--
+    Program name: homework3.html
+    Date created: September 23, 2025
+    Date last edited: December 4, 2025
+    Version: 4.0
+    Description: Patient registration form with real-time validation, Fetch API, iFrames, cookies, local storage, and time-based events
+    -->
+</head>
+<body>
+    <!-- Header/Banner Section -->
+    <div id="header" class="sticky-header">
+        <div id="banner">
+            <img src="medical-logo.svg" alt="We'R'Docs Medical Logo" id="logo">
+            <h1>We'R'Docs Medical</h1>
+            <div id="date-display">
+                <div id="welcome-message">Welcome</div>
+                <div id="current-datetime"></div>
+            </div>
+        </div>
+        <div id="returning-user-notice" style="display:none;"></div>
+    </div>
+
+    <!-- Main Content Section -->
+    <div id="main-content">
+        <h2>Patient Registration Form</h2>
+        <p>Please fill out all required information to register as a new patient. Fields are validated as you type.</p>
+
+        <!-- Patient Resources iframe -->
+        <div class="iframe-container">
+            <iframe src="info-iframe.html" title="Patient Resources"></iframe>
+        </div>
+
+        <!-- Patient Registration Form -->
+        <form id="patient-form" action="thankyou.html" method="get">
+
+            <!-- Personal Information Section -->
+            <fieldset>
+                <legend>Personal Information</legend>
+                <table class="form-table">
+                    <tr>
+                        <td>
+                            <label for="first-name">First Name: <span class="required">*</span></label>
+                            <input type="text" id="first-name" name="first-name" maxlength="30" 
+                                   pattern="[a-zA-Z'-]{1,30}" 
+                                   title="Enter first name (1-30 characters, letters, apostrophes, dashes only)" 
+                                   placeholder="John" required>
+                            <span id="first-name-error" class="error-message"></span>
+                        </td>
+                        <td>
+                            <label for="middle-initial">Middle Initial:</label>
+                            <input type="text" id="middle-initial" name="middle-initial" maxlength="1" 
+                                   pattern="[a-zA-Z]?" 
+                                   title="Enter middle initial (optional, single letter)" 
+                                   placeholder="D">
+                            <span id="middle-initial-error" class="error-message"></span>
+                        </td>
+                        <td>
+                            <label for="last-name">Last Name: <span class="required">*</span></label>
+                            <input type="text" id="last-name" name="last-name" maxlength="30" 
+                                   pattern="[a-zA-Z'-]{1,30}" 
+                                   title="Enter last name (1-30 characters, letters, apostrophes, dashes only)" 
+                                   placeholder="Doe" required>
+                            <span id="last-name-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label for="dob">Date of Birth (MM/DD/YYYY): <span class="required">*</span></label>
+                            <input type="text" id="dob" name="dob" placeholder="MM/DD/YYYY" 
+                                   pattern="(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}" 
+                                   title="Enter date of birth in MM/DD/YYYY format (not in future, not more than 120 years ago)" 
+                                   required>
+                            <span id="dob-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label for="ssn">Social Security Number: <span class="required">*</span></label>
+                            <div class="password-container">
+                                <input type="password" id="ssn" name="ssn" placeholder="XXX-XX-XXXX" maxlength="11" 
+                                       pattern="\d{3}-\d{2}-\d{4}" 
+                                       title="Enter SSN in XXX-XX-XXXX format (auto-formats as you type)" 
+                                       required>
+                                <span class="toggle-password" onclick="togglePassword('ssn')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </span>
+                            </div>
+                            <span id="ssn-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <!-- Address Information Section -->
+            <fieldset>
+                <legend>Address Information</legend>
+                <table class="form-table">
+                    <tr>
+                        <td colspan="3">
+                            <label for="address1">Address Line 1: <span class="required">*</span></label>
+                            <input type="text" id="address1" name="address1" maxlength="30" 
+                                   pattern=".{2,30}" 
+                                   title="Enter address line 1 (2-30 characters)" 
+                                   placeholder="123 Main Street" required>
+                            <span id="address1-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label for="address2">Address Line 2:</label>
+                            <input type="text" id="address2" name="address2" maxlength="30" 
+                                   pattern=".{0,30}" 
+                                   title="Enter address line 2 (optional, 2-30 characters if entered)" 
+                                   placeholder="Apt 4B">
+                            <span id="address2-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="city">City: <span class="required">*</span></label>
+                            <input type="text" id="city" name="city" maxlength="30" 
+                                   pattern=".{2,30}" 
+                                   title="Enter city (2-30 characters)" 
+                                   placeholder="Houston" required>
+                            <span id="city-error" class="error-message"></span>
+                        </td>
+                        <td>
+                            <label for="state">State: <span class="required">*</span></label>
+                            <select id="state" name="state" title="Select your state" required>
+                                <option value="">Loading states...</option>
+                            </select>
+                            <span id="state-error" class="error-message"></span>
+                        </td>
+                        <td>
+                            <label for="zip">Zip Code: <span class="required">*</span></label>
+                            <input type="text" id="zip" name="zip" maxlength="5" 
+                                   pattern="\d{5}" 
+                                   title="Enter zip code (5 digits)" 
+                                   placeholder="77496" required>
+                            <span id="zip-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <!-- Contact Information Section -->
+            <fieldset>
+                <legend>Contact Information</legend>
+                <table class="form-table">
+                    <tr>
+                        <td colspan="3">
+                            <label for="email">Email Address: <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" 
+                                   pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" 
+                                   title="Enter valid email address in name@domain.tld format (will be converted to lowercase)" 
+                                   placeholder="john.doe@email.com" required>
+                            <span id="email-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label for="phone">Phone Number:</label>
+                            <input type="text" id="phone" name="phone" placeholder="000-000-0000" 
+                                   pattern="\d{3}-\d{3}-\d{4}" maxlength="12"
+                                   title="Enter phone number in 000-000-0000 format (auto-formats as you type)">
+                            <span id="phone-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <!-- Medical History Section -->
+            <fieldset>
+                <legend>Medical History</legend>
+                <table class="form-table">
+                    <tr>
+                        <td colspan="3">
+                            <label for="symptoms">Please describe your current symptoms:</label>
+                            <textarea id="symptoms" name="symptoms" rows="3" 
+                                      placeholder="Describe your symptoms here..." 
+                                      title="Describe your current symptoms (optional)"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label>Check all of the following that apply - Have you had:</label><br>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" id="chickenpox" name="vaccinations" value="chickenpox"> Chicken Pox</label>
+                                <label><input type="checkbox" id="measles" name="vaccinations" value="measles"> Measles</label>
+                                <label><input type="checkbox" id="covid19" name="vaccinations" value="covid19"> COVID-19</label>
+                                <label><input type="checkbox" id="smallpox" name="vaccinations" value="smallpox"> Small Pox</label>
+                                <label><input type="checkbox" id="tetanus" name="vaccinations" value="tetanus"> Tetanus</label>
+                                <label><input type="checkbox" id="flu" name="vaccinations" value="flu"> Seasonal Flu</label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <!-- Additional Information Section -->
+            <fieldset>
+                <legend>Additional Information</legend>
+                <table class="form-table">
+                    <tr>
+                        <td colspan="3">
+                            <label>Gender: <span class="required">*</span></label>
+                            <div class="radio-group">
+                                <label><input type="radio" id="male" name="gender" value="male" required> Male</label>
+                                <label><input type="radio" id="female" name="gender" value="female"> Female</label>
+                                <label><input type="radio" id="other" name="gender" value="other"> Other</label>
+                            </div>
+                            <span id="gender-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label>Have you been vaccinated? <span class="required">*</span></label>
+                            <div class="radio-group">
+                                <label><input type="radio" id="vaccinated-yes" name="vaccinated" value="yes" required> Yes</label>
+                                <label><input type="radio" id="vaccinated-no" name="vaccinated" value="no"> No</label>
+                            </div>
+                            <span id="vaccinated-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label>Do you have health insurance? <span class="required">*</span></label>
+                            <div class="radio-group">
+                                <label><input type="radio" id="insurance-yes" name="insurance" value="yes" required> Yes</label>
+                                <label><input type="radio" id="insurance-no" name="insurance" value="no"> No</label>
+                            </div>
+                            <span id="insurance-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label for="health-rating">On a scale of 1-10, how is your overall health? (10 being excellent)</label>
+                            <div class="slider-container">
+                                <input type="range" id="health-rating" name="health-rating" min="1" max="10" value="5">
+                                <span id="health-value">5</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <!-- Account Information Section -->
+            <fieldset>
+                <legend>Account Information</legend>
+                <table class="form-table">
+                    <tr>
+                        <td colspan="3">
+                            <label for="userid">Desired User ID: <span class="required">*</span></label>
+                            <input type="text" id="userid" name="userid" maxlength="20" 
+                                   pattern="[a-zA-Z][a-zA-Z0-9_-]{4,19}" 
+                                   title="Enter user ID (5-20 characters, must start with letter, only letters/numbers/dash/underscore, will be converted to lowercase)" 
+                                   placeholder="johndoe123" required>
+                            <span id="userid-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label for="password">Password: <span class="required">*</span></label>
+                            <div class="password-container">
+                                <input type="password" id="password" name="password" 
+                                       title="Enter password (8+ characters, at least 1 uppercase, 1 lowercase, 1 digit, cannot equal user ID)" 
+                                       placeholder="Enter secure password" required>
+                                <span class="toggle-password" onclick="togglePassword('password')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </span>
+                            </div>
+                            <span id="password-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label for="confirm-password">Re-enter Password: <span class="required">*</span></label>
+                            <div class="password-container">
+                                <input type="password" id="confirm-password" name="confirm-password" 
+                                       title="Re-enter password (must match above)" 
+                                       placeholder="Confirm password" required>
+                                <span class="toggle-password" onclick="togglePassword('confirm-password')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </span>
+                            </div>
+                            <span id="confirm-password-error" class="error-message"></span>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <!-- Remember Me Section -->
+            <fieldset>
+                <legend>Privacy Preferences</legend>
+                <table class="form-table">
+                    <tr>
+                        <td colspan="3">
+                            <label class="remember-me-label">
+                                <input type="checkbox" id="remember-me" name="remember-me" checked>
+                                <strong>Remember Me</strong> - Save my information for future visits (non-secure data only)
+                            </label>
+                            <p style="font-size: 0.9em; color: #666; margin-top: 8px;">
+                                ℹ️ When checked, we'll remember your name and pre-fill non-sensitive information on your next visit. 
+                                Uncheck to clear all saved data when you leave.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <!-- Form Buttons -->
+            <div class="form-buttons">
+                <input type="reset" value="CLEAR AND START OVER">
+                <input type="button" value="Review" onclick="showReview()">
+                <input type="button" id="submit-button" value="Submit Registration" onclick="submitForm()" disabled>
+            </div>
+        </form>
+
+        <!-- Review Area -->
+        <div id="review-area" style="display:none;"></div>
+    </div>
+
+    <!-- Footer Section -->
+    <div id="footer" class="sticky-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>We'R'Docs Medical</h3>
+                <p>PO BOX 18881<br>
+                Sugar Land, TX 77496</p>
+            </div>
+            <div class="footer-section">
+                <button onclick="contactUs()">CONTACT US</button>
+            </div>
+            <div class="footer-section">
+                <p>Follow us:</p>
+                <a href="#" class="social-link">Facebook</a> |
+                <a href="#" class="social-link">Twitter</a> |
+                <a href="#" class="social-link">LinkedIn</a>
+            </div>
+        </div>
+        <div id="session-timer" class="session-timer"></div>
+    </div>
+
+    <!-- JavaScript for dynamic date and form interactions -->
+    <script>
+        // Cookie and LocalStorage Management
+        function setCookie(name, value, hours) {
+            const d = new Date();
+            d.setTime(d.getTime() + (hours * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + ";expires=" + d.toUTCString() + ";path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function deleteCookie(name) {
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+        }
+
+        function clearAllData() {
+            deleteCookie('firstName');
+            localStorage.clear();
+            document.getElementById('patient-form').reset();
+            location.reload();
+        }
+
+        // Check for returning user
+        function checkReturningUser() {
+            const savedFirstName = getCookie('firstName');
+            const welcomeMsg = document.getElementById('welcome-message');
+            const returningNotice = document.getElementById('returning-user-notice');
+            
+            if (savedFirstName) {
+                welcomeMsg.innerHTML = `<strong>Welcome back, ${savedFirstName}!</strong> 👋`;
+                returningNotice.innerHTML = `
+                    <div style="background: #fff3cd; padding: 10px; text-align: center; border-bottom: 2px solid #ffc107;">
+                        <label style="cursor: pointer;">
+                            <input type="checkbox" id="not-me-checkbox" onchange="handleNotMe()">
+                            Not ${savedFirstName}? Click here to start as a NEW USER
+                        </label>
+                    </div>
+                `;
+                returningNotice.style.display = 'block';
+                
+                // Load saved data from localStorage
+                loadFormData();
+            } else {
+                welcomeMsg.innerHTML = '<strong>Welcome, New User!</strong> 👤';
+            }
+        }
+
+        function handleNotMe() {
+            if (document.getElementById('not-me-checkbox').checked) {
+                if (confirm('This will clear all your saved information. Continue?')) {
+                    clearAllData();
+                } else {
+                    document.getElementById('not-me-checkbox').checked = false;
+                }
+            }
+        }
+
+        // Save form data to localStorage
+        function saveToLocalStorage(fieldId, value) {
+            const rememberMe = document.getElementById('remember-me').checked;
+            if (rememberMe && fieldId !== 'ssn' && fieldId !== 'password' && fieldId !== 'confirm-password') {
+                localStorage.setItem(fieldId, value);
+            }
+        }
+
+        // Load form data from localStorage
+        function loadFormData() {
+            const fields = [
+                'first-name', 'middle-initial', 'last-name', 'dob',
+                'address1', 'address2', 'city', 'state', 'zip',
+                'email', 'phone', 'symptoms', 'health-rating', 'userid'
+            ];
+            
+            fields.forEach(fieldId => {
+                const savedValue = localStorage.getItem(fieldId);
+                if (savedValue) {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.value = savedValue;
+                        if (fieldId === 'health-rating') {
+                            document.getElementById('health-value').textContent = savedValue;
+                        }
+                    }
+                }
+            });
+
+            // Load radio buttons
+            ['gender', 'vaccinated', 'insurance'].forEach(name => {
+                const savedValue = localStorage.getItem(name);
+                if (savedValue) {
+                    const radio = document.querySelector(`input[name="${name}"][value="${savedValue}"]`);
+                    if (radio) radio.checked = true;
+                }
+            });
+
+            // Load checkboxes
+            const savedVaccinations = localStorage.getItem('vaccinations');
+            if (savedVaccinations) {
+                savedVaccinations.split(',').forEach(value => {
+                    const checkbox = document.getElementById(value);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+        }
+
+        // Display current date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('current-datetime').textContent = 
+                'Today is: ' + now.toLocaleDateString('en-US', options);
+        }
+
+        // Session timer (15 minutes)
+        let sessionMinutes = 15;
+        let sessionSeconds = 0;
+        let sessionTimer;
+
+        function updateSessionTimer() {
+            const timerDisplay = document.getElementById('session-timer');
+            
+            if (sessionMinutes === 0 && sessionSeconds === 0) {
+                clearInterval(sessionTimer);
+                alert('⏰ Session expired! Your form will be saved and you can continue later.');
+                return;
+            }
+            
+            if (sessionMinutes === 1 && sessionSeconds === 0) {
+                if (confirm('⚠️ You have 1 minute remaining. Click OK to continue working.')) {
+                    sessionMinutes = 15;
+                    sessionSeconds = 0;
+                }
+            }
+            
+            timerDisplay.innerHTML = `⏱️ Session time remaining: <strong>${sessionMinutes}:${sessionSeconds.toString().padStart(2, '0')}</strong>`;
+            
+            if (sessionSeconds === 0) {
+                sessionMinutes--;
+                sessionSeconds = 59;
+            } else {
+                sessionSeconds--;
+            }
+        }
+
+        // Fetch states from JSON file
+        async function loadStates() {
+            try {
+                const response = await fetch('states.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load states');
+                }
+                const data = await response.json();
+                const stateSelect = document.getElementById('state');
+                stateSelect.innerHTML = '';
+                
+                data.states.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state.code;
+                    option.textContent = state.name;
+                    stateSelect.appendChild(option);
+                });
+                
+                // Restore saved state if exists
+                const savedState = localStorage.getItem('state');
+                if (savedState) {
+                    stateSelect.value = savedState;
+                }
+            } catch (error) {
+                console.error('Error loading states:', error);
+                document.getElementById('state').innerHTML = '<option value="">Error loading states</option>';
+            }
+        }
+
+        // Update health rating display
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize
+            checkReturningUser();
+            loadStates();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Start session timer
+            sessionTimer = setInterval(updateSessionTimer, 1000);
+            updateSessionTimer();
+            
+            // Health rating slider
+            document.getElementById('health-rating').addEventListener('input', function() {
+                document.getElementById('health-value').textContent = this.value;
+                saveToLocalStorage('health-rating', this.value);
+            });
+
+            // Save form fields to localStorage on change
+            const formFields = document.querySelectorAll('input, select, textarea');
+            formFields.forEach(field => {
+                if (field.type !== 'password' && field.id !== 'ssn') {
+                    field.addEventListener('blur', function() {
+                        if (this.id && this.id !== 'remember-me' && this.id !== 'not-me-checkbox') {
+                            saveToLocalStorage(this.id, this.value);
+                        }
+                    });
+                }
+                
+                if (field.type === 'radio') {
+                    field.addEventListener('change', function() {
+                        saveToLocalStorage(this.name, this.value);
+                    });
+                }
+                
+                if (field.type === 'checkbox' && field.name === 'vaccinations') {
+                    field.addEventListener('change', function() {
+                        const checked = Array.from(document.querySelectorAll('input[name="vaccinations"]:checked'))
+                            .map(cb => cb.value);
+                        localStorage.setItem('vaccinations', checked.join(','));
+                    });
+                }
+            });
+
+            // Save first name to cookie
+            document.getElementById('first-name').addEventListener('blur', function() {
+                const rememberMe = document.getElementById('remember-me').checked;
+                if (rememberMe && this.value) {
+                    setCookie('firstName', this.value, 48);
+                }
+            });
+
+            // Handle remember me checkbox
+            document.getElementById('remember-me').addEventListener('change', function() {
+                if (!this.checked) {
+                    if (confirm('This will clear all your saved data. Continue?')) {
+                        clearAllData();
+                    } else {
+                        this.checked = true;
+                    }
+                }
+            });
+        });
+
+        // Contact us function
+        function contactUs() {
+            alert('Contact information:\nEmail: info@werdocsmedical.com\nPhone: (281) 555-0123');
+        }
+
+        // Toggle password visibility
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const toggleBtn = field.nextElementSibling;
+            const svg = toggleBtn.querySelector('svg');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+            } else {
+                field.type = 'password';
+                svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+            }
+        }
+    </script>
+    
+    <!-- External validation script -->
+    <script src="validation.js"></script>
+</body>
+</html>

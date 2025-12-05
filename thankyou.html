@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - We'R'Docs Medical</title>
+    <link href="style.css" rel="stylesheet">
+    <!--
+    Program name: thankyou.html
+    Author: Your Name
+    Date created: September 23, 2025
+    Date last edited: September 23, 2025
+    Version: 1.0
+    Description: Thank you page for We'R'Docs Medical patient registration form submission
+    -->
+</head>
+<body>
+    <!-- Header/Banner Section -->
+    <div id="header">
+        <div id="banner">
+            <img src="medical-logo.svg" alt="We'R'Docs Medical Logo" id="logo">
+            <h1>We'R'Docs Medical</h1>
+            <div id="date-display">today is: <span id="current-date"></span></div>
+        </div>
+    </div>
+
+    <!-- Main Content Section -->
+    <div id="main-content">
+        <h2>Thank You for Your Registration!</h2>
+        <div style="text-align: center; padding: 50px 20px;">
+            <div style="font-size: 4em; color: #28a745; margin-bottom: 20px;">✓</div>
+            <p style="font-size: 1.2em; margin-bottom: 30px;">
+                Your patient registration has been submitted successfully.
+            </p>
+            <p>
+                Our staff will review your information and contact you within 2-3 business days to schedule your appointment.
+            </p>
+            <p style="margin-top: 20px;">
+                If you have any questions, please don't hesitate to contact us.
+            </p>
+            <div style="margin-top: 40px;">
+                <a href="homework3.html" style="display: inline-block; padding: 12px 24px; background: #0066cc; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Register Another Patient</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div id="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>We'R'Docs Medical</h3>
+                <p>PO BOX 18881<br>
+                Sugar Land, TX 77496</p>
+            </div>
+            <div class="footer-section">
+                <button onclick="contactUs()">CONTACT US</button>
+            </div>
+            <div class="footer-section">
+                <p>Follow us:</p>
+                <a href="#" class="social-link">Facebook</a> |
+                <a href="#" class="social-link">Twitter</a> |
+                <a href="#" class="social-link">LinkedIn</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for dynamic date -->
+    <script>
+        // Display current date
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Contact us function
+        function contactUs() {
+            alert('Contact information:\nEmail: info@werdocsmedical.com\nPhone: (281) 555-0123');
+        }
+
+        // Initialize date on page load
+        window.onload = updateDate;
+    </script>
+</body>
+</html>
